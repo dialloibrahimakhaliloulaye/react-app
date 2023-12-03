@@ -2,33 +2,35 @@ import { faCheckCircle, faCircle } from "@fortawesome/free-regular-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, {useEffect, useState} from "react";
-import axios from "axios"
+import { checkProduct, deleteProduct, getProducts } from "./app/app";
 
 export default function Product() {
     const [product, setProduct] = useState([])
     useEffect(()=>{
         handleGetProducts();
-    })
+    },[])
     const handleGetProducts=()=>{
-        axios.get("http://localhost:9000/products")
-        .then(resp=>{
-            const products = resp.data;
-            setProduct(products);
+        getProducts().then(resp=>{
+            setProduct(resp.data);
         })
         .catch(err=>{
             console.log(err);
         })
     }
     function handleDeleteProduct(prod){
-        const newProduct = product.filter((p)=>p.id!=prod.id);
-        setProduct(newProduct);
+        deleteProduct(prod).then(()=>{
+            const newProduct = product.filter((p)=>p.id!=prod.id);
+            setProduct(newProduct);  
+        })
     }
     function handleCheckProduct(prod){
-        const newProduct = product.map((p)=>{
-            if(p.id==prod.id) p.checked =! p.checked
-            return p;
-        });
-        setProduct(newProduct);
+        checkProduct(prod).then(()=>{
+            const newProduct = product.map((p)=>{
+                if(p.id==prod.id) p.checked = !p.checked
+                return p;
+            });
+            setProduct(newProduct);
+        })
     }
     return (
         <div className="p-1 m-1">
