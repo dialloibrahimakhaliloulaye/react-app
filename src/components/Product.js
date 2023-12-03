@@ -1,14 +1,35 @@
-import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
+import { faCheckCircle, faCircle } from "@fortawesome/free-regular-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios"
 
 export default function Product() {
-    const [product, setProduct] = useState([
-        {id: 1, name: "Computer", price: 4200, checked: true},
-        {id: 2, name: "Printer", price: 1500, checked: false},
-        {id: 3, name: "Smart phone", price: 3400, checked: true},
-        {id: 4, name: "Apple", price: 4000, checked: true},
-    ])
+    const [product, setProduct] = useState([])
+    useEffect(()=>{
+        handleGetProducts();
+    })
+    const handleGetProducts=()=>{
+        axios.get("http://localhost:9000/products")
+        .then(resp=>{
+            const products = resp.data;
+            setProduct(products);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
+    function handleDeleteProduct(prod){
+        const newProduct = product.filter((p)=>p.id!=prod.id);
+        setProduct(newProduct);
+    }
+    function handleCheckProduct(prod){
+        const newProduct = product.map((p)=>{
+            if(p.id==prod.id) p.checked =! p.checked
+            return p;
+        });
+        setProduct(newProduct);
+    }
     return (
         <div className="p-1 m-1">
             <div className="row">
@@ -24,13 +45,20 @@ export default function Product() {
                                 <tbody>
                                 {
                                     product.map(p=>(
-                                        <tr>
+                                        <tr key={p.id}>
                                             <td>{p.id}</td>
                                             <td>{p.name}</td>
                                             <td>{p.price}</td>
                                             <td>
-                                                <button className="btn btn-outline-success">
-                                                <FontAwesomeIcon icon={faCheckCircle}></FontAwesomeIcon>
+                                                <button onClick={()=>handleCheckProduct(p)}
+                                                    className="btn btn-outline-success">
+                                                <FontAwesomeIcon icon={p.checked?faCheckCircle:faCircle}></FontAwesomeIcon>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button onClick={()=>handleDeleteProduct(p)}
+                                                className="btn btn-outline-danger">
+                                                    <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
                                                 </button>
                                             </td>
                                         </tr>
