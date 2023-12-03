@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import Product from "./components/Product";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {useEffect, useState} from "react";
+import NewProduct from './components/NewProduct';
 
 function App() {
     const [currentRoute, setCurrentRoute] = useState();
@@ -27,11 +28,18 @@ function App() {
                   className={currentRoute === 'products'?'btn btn-info ms-1':'btn btn-outline-info ms-1'}
                   to={"/products"}>Products</Link>
           </li>
+          <li>
+              <Link
+                  onClick={()=>setCurrentRoute("newProduct")}
+                  className={currentRoute === 'newProduct'?'btn btn-info ms-1':'btn btn-outline-info ms-1'}
+                  to={"/newProduct"}>New products</Link>
+          </li>
         </ul>
       </nav>
       <Routes>
         <Route path="/home" element={<Home/>}></Route>
         <Route path="/products" element={<Product/>}></Route>
+        <Route path="/newProduct" element={<NewProduct/>}></Route>
       </Routes>
     </BrowserRouter>
   );

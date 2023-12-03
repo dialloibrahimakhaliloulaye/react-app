@@ -53,6 +53,18 @@
       "name": "Smart phone",
       "price": 3400,
       "checked": true
+    },
+    {
+      "name": "Wourouss",
+      "price": "1400",
+      "checked": "on",
+      "id": 10
+    },
+    {
+      "name": "Frigo",
+      "price": "7500",
+      "checked": "on",
+      "id": 11
     }
   ]
 }
